@@ -6,6 +6,8 @@ import userRouter from "./src/routes/user.route"
 import AdminRouter from "./src/routes/admin.route"
 import * as functionsV2 from 'firebase-functions/v2';
 
+import cors from "cors"
+
 //import * as functionsV2 from 'firebase-functions';
 import UserRoutes from "./src/routes/user.route"
 //import { Server } from 'socket.io';
@@ -19,6 +21,19 @@ import jsonwebtoken from 'jsonwebtoken';
 import { collection, addDoc, doc, setDoc } from 'firebase/firestore';
 import { db } from './firebase';
 
+app.use(cors({
+  origin: "*",
+  methods: ["POST", "PUT", "GET", "OPTIONS", "HEAD"],
+  credentials: true
+}))
+app.use(function (req, res, next) {
+
+  res.setHeader('Access-Control-Allow-Origin', "https://the-app-svqo.onrender.com");
+  res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS, PUT, PATCH, DELETE');
+  res.setHeader('Access-Control-Allow-Headers', 'Origin,X-Requested-With,content-type,set-cookie');
+  res.setHeader('Access-Control-Allow-Credentials', "true");
+  next();
+});
 
 const server = http.createServer(app);
 
@@ -37,14 +52,7 @@ app.use((req, res, next) => {
   next()
 });
 
-app.use(function (req, res, next) {
 
-  res.setHeader('Access-Control-Allow-Origin', "*");
-  res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS, PUT, PATCH, DELETE');
-  res.setHeader('Access-Control-Allow-Headers', 'Origin,X-Requested-With,content-type,set-cookie');
-  res.setHeader('Access-Control-Allow-Credentials', "true");
-  next();
-});
 
 
 export const receiverIdToSocketIdMap: any = {};

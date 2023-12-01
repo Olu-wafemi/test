@@ -17,6 +17,7 @@ const body_parser_1 = __importDefault(require("body-parser"));
 const express_1 = __importDefault(require("express"));
 const http_1 = __importDefault(require("http"));
 const admin_route_1 = __importDefault(require("./src/routes/admin.route"));
+const cors_1 = __importDefault(require("cors"));
 //import * as functionsV2 from 'firebase-functions';
 const user_route_1 = __importDefault(require("./src/routes/user.route"));
 //import { Server } from 'socket.io';
@@ -27,6 +28,18 @@ const jwt = require('jsonwebtoken');
 const socket_io_1 = require("socket.io");
 const firestore_1 = require("firebase/firestore");
 const firebase_1 = require("./firebase");
+app.use((0, cors_1.default)({
+    origin: "*",
+    methods: ["POST", "PUT", "GET", "OPTIONS", "HEAD"],
+    credentials: true
+}));
+app.use(function (req, res, next) {
+    res.setHeader('Access-Control-Allow-Origin', "https://the-app-svqo.onrender.com");
+    res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS, PUT, PATCH, DELETE');
+    res.setHeader('Access-Control-Allow-Headers', 'Origin,X-Requested-With,content-type,set-cookie');
+    res.setHeader('Access-Control-Allow-Credentials', "true");
+    next();
+});
 const server = http_1.default.createServer(app);
 const io = new socket_io_1.Server(server);
 //io.on("connection",()=>{
@@ -39,13 +52,6 @@ app.use('/api', (0, user_route_1.default)(io));
 app.use((req, res, next) => {
     // Implement your logic to extract user information from the request
     // For example, retrieve user ID from a session, token, or other authentication mechanism
-    next();
-});
-app.use(function (req, res, next) {
-    res.setHeader('Access-Control-Allow-Origin', "*");
-    res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS, PUT, PATCH, DELETE');
-    res.setHeader('Access-Control-Allow-Headers', 'Origin,X-Requested-With,content-type,set-cookie');
-    res.setHeader('Access-Control-Allow-Credentials', "true");
     next();
 });
 exports.receiverIdToSocketIdMap = {};
