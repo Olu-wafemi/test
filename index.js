@@ -49,11 +49,6 @@ app.use(body_parser_1.default.json());
 app.use("/api", admin_route_1.default);
 app.use('/api', (0, chat_1.default)(io));
 app.use('/api', (0, user_route_1.default)(io));
-app.use((req, res, next) => {
-    // Implement your logic to extract user information from the request
-    // For example, retrieve user ID from a session, token, or other authentication mechanism
-    next();
-});
 exports.receiverIdToSocketIdMap = {};
 io.on('connection', (socket) => __awaiter(void 0, void 0, void 0, function* () {
     console.log('A user connected');

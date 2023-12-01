@@ -45,15 +45,6 @@ app.use(bodyParser.json())
 app.use("/api", AdminRouter)
 app.use('/api', chatRoutes(io));
 app.use('/api', UserRoutes(io))
-app.use((req, res, next) => {
-  // Implement your logic to extract user information from the request
-  // For example, retrieve user ID from a session, token, or other authentication mechanism
-  
-  next()
-});
-
-
-
 
 export const receiverIdToSocketIdMap: any = {};
 
@@ -61,8 +52,6 @@ export const receiverIdToSocketIdMap: any = {};
 interface CustomSocket extends Socket {
   userId?: string;
 }
-
-
 
 io.on('connection', async(socket: CustomSocket) => {
   console.log('A user connected');
