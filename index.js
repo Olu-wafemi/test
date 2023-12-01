@@ -1,27 +1,4 @@
 "use strict";
-var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
-    if (k2 === undefined) k2 = k;
-    var desc = Object.getOwnPropertyDescriptor(m, k);
-    if (!desc || ("get" in desc ? !m.__esModule : desc.writable || desc.configurable)) {
-      desc = { enumerable: true, get: function() { return m[k]; } };
-    }
-    Object.defineProperty(o, k2, desc);
-}) : (function(o, m, k, k2) {
-    if (k2 === undefined) k2 = k;
-    o[k2] = m[k];
-}));
-var __setModuleDefault = (this && this.__setModuleDefault) || (Object.create ? (function(o, v) {
-    Object.defineProperty(o, "default", { enumerable: true, value: v });
-}) : function(o, v) {
-    o["default"] = v;
-});
-var __importStar = (this && this.__importStar) || function (mod) {
-    if (mod && mod.__esModule) return mod;
-    var result = {};
-    if (mod != null) for (var k in mod) if (k !== "default" && Object.prototype.hasOwnProperty.call(mod, k)) __createBinding(result, mod, k);
-    __setModuleDefault(result, mod);
-    return result;
-};
 var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
     function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
     return new (P || (P = Promise))(function (resolve, reject) {
@@ -35,12 +12,11 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.the_appv2 = exports.receiverIdToSocketIdMap = void 0;
+exports.receiverIdToSocketIdMap = void 0;
 const body_parser_1 = __importDefault(require("body-parser"));
 const express_1 = __importDefault(require("express"));
 const http_1 = __importDefault(require("http"));
 const admin_route_1 = __importDefault(require("./src/routes/admin.route"));
-const functionsV2 = __importStar(require("firebase-functions/v2"));
 //import * as functionsV2 from 'firebase-functions';
 const user_route_1 = __importDefault(require("./src/routes/user.route"));
 //import { Server } from 'socket.io';
@@ -63,6 +39,13 @@ app.use('/api', (0, user_route_1.default)(io));
 app.use((req, res, next) => {
     // Implement your logic to extract user information from the request
     // For example, retrieve user ID from a session, token, or other authentication mechanism
+    next();
+});
+app.use(function (req, res, next) {
+    res.setHeader('Access-Control-Allow-Origin', "*");
+    res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS, PUT, PATCH, DELETE');
+    res.setHeader('Access-Control-Allow-Headers', 'Origin,X-Requested-With,content-type,set-cookie');
+    res.setHeader('Access-Control-Allow-Credentials', "true");
     next();
 });
 exports.receiverIdToSocketIdMap = {};
@@ -180,4 +163,4 @@ app.all("*", (req, res) => {
         error: "You Completely Lost Your Way 😈",
     });
 });
-exports.the_appv2 = functionsV2.https.onRequest(app);
+//export const the_appv2 = functionsV2.https.onRequest(app)
